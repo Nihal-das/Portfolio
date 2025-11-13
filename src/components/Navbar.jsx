@@ -44,7 +44,6 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           {/* Theme Toggle */}
           <button
-            hidden
             onClick={() => setIsLightMode(!isLightMode)}
             className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:scale-110 transition-transform duration-300"
           >
