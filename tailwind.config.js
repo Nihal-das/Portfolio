@@ -1,24 +1,20 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          light: "#6366F1",
-          dark: "#8B5CF6",
-        },
-        background: {
-          light: "#F9FAFB",
-          dark: "#0B1120",
-        },
-      },
-      fontFamily: {
-        sans: ["Poppins", "Inter", "sans-serif"],
-      },
-      boxShadow: {
-        glow: "0 0 20px rgba(139, 92, 246, 0.5)",
-      },
-    },
-  },
-};
+  // /** @type {import('tailwindcss').Config} */
+  // export default {
+  //   darkMode: 'class',
+  //   content: [
+  //     "./index.html",
+  //     "./src/**/*.{js,jsx,ts,tsx}",    // Covers all components in src/
+  //     "./public/index.html",           // Optionally covers public HTML if you use it
+  //   ],
+  //   theme: {
+  //     extend: {
+  //       colors: {
+  //         'bg-light': '#f9fafb',
+  //         'bg-dark': '#0b1120',
+  //         'text-light': '#0f172a',
+  //         'text-dark': '#f9fafb',
+  //       },
+  //     },
+  //   },
+  //   plugins: [],
+  // };
