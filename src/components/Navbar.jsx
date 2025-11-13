@@ -8,7 +8,9 @@ const Navbar = () => {
   // Sync with system or saved preference
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
 
     if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
       document.documentElement.classList.add("dark");
@@ -19,21 +21,21 @@ const Navbar = () => {
     }
   }, []);
 
- // Smooth fade transition handler
-const enableTransition = () => {
-  document.documentElement.classList.add("theme-transition");
-  setTimeout(() => {
-    document.documentElement.classList.remove("theme-transition");
-  }, 600);
-};
+  // Smooth fade transition handler
+  const enableTransition = () => {
+    document.documentElement.classList.add("theme-transition");
+    setTimeout(() => {
+      document.documentElement.classList.remove("theme-transition");
+    }, 600);
+  };
 
-const toggleTheme = () => {
-  enableTransition(); // add fade effect
-  const newTheme = isDarkMode ? "light" : "dark";
-  document.documentElement.classList.toggle("dark", newTheme === "dark");
-  localStorage.setItem("theme", newTheme);
-  setIsDarkMode(!isDarkMode);
-};
+  const toggleTheme = () => {
+    enableTransition(); // add fade effect
+    const newTheme = isDarkMode ? "light" : "dark";
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
+  };
 
   const navItems = ["Home", "About", "Skills", "Projects", "Contact"];
 
@@ -62,6 +64,7 @@ const toggleTheme = () => {
 
         {/* Theme Toggle Button */}
         <button
+          hidden
           onClick={toggleTheme}
           className="absolute right-14 md:right-20 text-xl text-gray-200 dark:text-gray-800 hover:text-purple-400 dark:hover:text-indigo-600 transition-transform duration-300 hover:scale-110"
           aria-label="Toggle Theme"
