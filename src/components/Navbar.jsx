@@ -10,9 +10,9 @@ const Navbar = () => {
     const html = document.documentElement;
 
     if (isLightMode) {
-      html.classList.add("dark"); // Switch to light
+      html.classList.remove("dark"); // Switch to light
     } else {
-      html.classList.remove("dark"); // Default dark
+      html.classList.add("dark"); // Default dark
     }
   }, [isLightMode]);
 
@@ -43,7 +43,8 @@ const Navbar = () => {
         {/* Controls */}
         <div className="flex items-center gap-4">
           {/* Theme Toggle */}
-          <button hidden
+          <button
+            hidden
             onClick={() => setIsLightMode(!isLightMode)}
             className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:scale-110 transition-transform duration-300"
           >
