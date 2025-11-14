@@ -19,7 +19,7 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.from_name || !formData.from_email || !formData.message) {
@@ -35,41 +35,40 @@ const Contact = () => {
       theme: "dark",
     });
 
-    // 1) First email — send message to YOU
-    emailjs
-      .sendForm(
-        "service_erpebg7", // your service ID
-        "template_k4y5cvn", // your main template
+    try {
+      // 1️⃣ Send message to YOU using Gmail
+      await emailjs.sendForm(
+        "service_0worfes", // ✔ correct Gmail service
+        "template_k4y5cvn", // ✔ main template
         formRef.current,
-        "iCsKa5I1cM1rLNpv8" // your public key
-      )
-      .then(() => {
-        // 2) Second email — automatic reply to USER
-        emailjs.send(
-          "service_ok7779I", // same service
-          "template_xxzlp1z", // <-- replace with your autoresponse template ID
-          {
-            to_email: formData.from_email,
-            to_name: formData.from_name,
-          },
-          "iCsKa5I1cM1rLNpv8"
-        );
+        "iCsKa5I1cM1rLNpv8" // ✔ public key
+      );
 
-        toast.success("Message sent successfully ✅", {
-          position: "bottom-right",
-          autoClose: 3000,
-          theme: "dark",
-        });
+      // 2️⃣ Send automatic reply to USER using SMTP
+      await emailjs.send(
+        "service_ok7779l", //
+        "template_xxzlp1z", // ✔ replace with your autoresponder template
+        {
+          to_email: formData.from_email,
+          to_name: formData.from_name,
+        },
+        "iCsKa5I1cM1rLNpv8"
+      );
 
-        setFormData({ from_name: "", from_email: "", message: "" });
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Oops! Something went wrong ❌", {
-          position: "bottom-right",
-          theme: "dark",
-        });
+      toast.success("Message sent successfully ✅", {
+        position: "bottom-right",
+        autoClose: 3000,
+        theme: "dark",
       });
+
+      setFormData({ from_name: "", from_email: "", message: "" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong ❌", {
+        position: "bottom-right",
+        theme: "dark",
+      });
+    }
   };
 
   return (
