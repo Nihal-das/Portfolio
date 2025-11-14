@@ -46,7 +46,7 @@ const Contact = () => {
 
       // 2️⃣ Send automatic reply to USER using SMTP
       await emailjs.send(
-        "service_ok7779l", //
+        "service_0worfes", //
         "template_xxzlp1z", // ✔ replace with your autoresponder template
         {
           to_email: formData.from_email,
