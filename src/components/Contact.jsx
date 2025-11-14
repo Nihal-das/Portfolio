@@ -35,31 +35,41 @@ const Contact = () => {
       theme: "dark",
     });
 
-    // Replace these IDs with your actual EmailJS credentials
+    // 1) First email — send message to YOU
     emailjs
       .sendForm(
-        "service_erpebg7",
-        "template_k4y5cvn",
+        "service_erpebg7", // your service ID
+        "template_k4y5cvn", // your main template
         formRef.current,
-        "iCsKa5I1cM1rLNpv8"
+        "iCsKa5I1cM1rLNpv8" // your public key
       )
-      .then(
-        () => {
-          toast.success("Message sent successfully ✅", {
-            position: "bottom-right",
-            autoClose: 3000,
-            theme: "dark",
-          });
-          setFormData({ from_name: "", from_email: "", message: "" });
-        },
-        (error) => {
-          console.error(error.text);
-          toast.error("Oops! Something went wrong ❌", {
-            position: "bottom-right",
-            theme: "dark",
-          });
-        }
-      );
+      .then(() => {
+        // 2) Second email — automatic reply to USER
+        emailjs.send(
+          "service_erpebg7", // same service
+          "template_xxzlp1z", // <-- replace with your autoresponse template ID
+          {
+            to_email: formData.from_email,
+            to_name: formData.from_name,
+          },
+          "iCsKa5I1cM1rLNpv8"
+        );
+
+        toast.success("Message sent successfully ✅", {
+          position: "bottom-right",
+          autoClose: 3000,
+          theme: "dark",
+        });
+
+        setFormData({ from_name: "", from_email: "", message: "" });
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Oops! Something went wrong ❌", {
+          position: "bottom-right",
+          theme: "dark",
+        });
+      });
   };
 
   return (
@@ -74,11 +84,12 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="text-3xl md:text-4xl font-bold mb-12"
         >
-          Get In <span className="text-indigo-600 dark:text-purple-400">Touch</span>
+          Get In{" "}
+          <span className="text-indigo-600 dark:text-purple-400">Touch</span>
         </motion.h2>
 
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Left Side — Info */}
+          {/* Left Section */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -86,8 +97,8 @@ const Contact = () => {
             className="flex flex-col justify-center items-center md:items-start gap-5"
           >
             <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed text-center md:text-left">
-              Have a project idea, collaboration, or just want to say hi?  
-              Drop a message — I’d love to connect.
+              Have a project idea, collaboration, or just want to say hi? Drop a
+              message — I’d love to connect.
             </p>
 
             <div className="flex gap-6 text-2xl mt-4">
@@ -116,7 +127,7 @@ const Contact = () => {
             </div>
           </motion.div>
 
-          {/* Right Side — Form */}
+          {/* Right — Contact Form */}
           <motion.form
             ref={formRef}
             onSubmit={handleSubmit}
@@ -132,7 +143,7 @@ const Contact = () => {
               onChange={handleChange}
               placeholder="Your Name"
               required
-              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-transparent focus:border-indigo-500 dark:focus:border-purple-400 outline-none"
+              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             />
             <input
               type="email"
@@ -141,7 +152,7 @@ const Contact = () => {
               onChange={handleChange}
               placeholder="Your Email"
               required
-              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-transparent focus:border-indigo-500 dark:focus:border-purple-400 outline-none"
+              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             />
             <textarea
               name="message"
@@ -150,8 +161,9 @@ const Contact = () => {
               placeholder="Your Message"
               rows="5"
               required
-              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-transparent focus:border-indigo-500 dark:focus:border-purple-400 outline-none resize-none"
+              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 resize-none"
             ></textarea>
+
             <button
               type="submit"
               className="px-6 py-3 bg-indigo-500 text-white rounded-full font-medium hover:bg-indigo-600 dark:bg-purple-500 dark:hover:bg-purple-600 transition"
@@ -162,7 +174,6 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Toast container for notifications */}
       <ToastContainer />
     </section>
   );
