@@ -46,7 +46,7 @@ const Contact = () => {
       .then(() => {
         // 2) Second email — automatic reply to USER
         emailjs.send(
-          "service_erpebg7", // same service
+          "service_ok7779l", // same service
           "template_xxzlp1z", // <-- replace with your autoresponse template ID
           {
             to_email: formData.from_email,
