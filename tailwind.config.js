@@ -1,21 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: "class", // Enable manual dark/light switching via .dark
+  darkMode: "class",
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
       colors: {
-        primary: {
-          light: "#6366F1", // Indigo 500
-          dark: "#8B5CF6",  // Purple 500
-        },
-        background: {
-          light: "#F9FAFB", // Light gray
-          dark: "#0B1120",  // Deep navy
-        },
-        text: {
-          light: "#0F172A", // Slate 900
-          dark: "#F9FAFB",  // White
-        },
+        primary: { light: "#6366F1", dark: "#8B5CF6" },
+        background: { light: "#F9FAFB", dark: "#0B1120" },
+        text: { light: "#0F172A", dark: "#F9FAFB" },
       },
       fontFamily: {
         sans: ["Poppins", "Inter", "sans-serif"],

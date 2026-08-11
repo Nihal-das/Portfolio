@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
-import { FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaEnvelope, FaLinkedin, FaGithub, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import emailjs from "emailjs-com";
@@ -36,18 +36,16 @@ const Contact = () => {
     });
 
     try {
-      // 1️⃣ Send message to YOU using Gmail
       await emailjs.sendForm(
-        "service_0worfes", // ✔ correct Gmail service
-        "template_k4y5cvn", // ✔ main template
+        "service_0worfes",
+        "template_k4y5cvn",
         formRef.current,
-        "iCsKa5I1cM1rLNpv8" // ✔ public key
+        "iCsKa5I1cM1rLNpv8"
       );
 
-      // 2️⃣ Send automatic reply to USER using SMTP
       await emailjs.send(
-        "service_0worfes", //
-        "template_xxzlp1z", // ✔ replace with your autoresponder template
+        "service_0worfes",
+        "template_xxzlp1z",
         {
           to_email: formData.from_email,
           to_name: formData.from_name,
@@ -71,20 +69,34 @@ const Contact = () => {
     }
   };
 
+  const contactDetails = [
+    { icon: <FaEnvelope />, label: "nihaldas8888@gmail.com", href: "mailto:nihaldas8888@gmail.com" },
+    { icon: <FaPhoneAlt />, label: "+91 77367 85386", href: "tel:+917736785386" },
+    { icon: <FaMapMarkerAlt />, label: "Kochi, Kerala, India", href: null },
+  ];
+
   return (
     <section
       id="contact"
       className="py-24 bg-gray-50 dark:bg-[#0B1120] text-gray-800 dark:text-gray-100 transition-colors duration-500"
     >
       <div className="max-w-5xl mx-auto px-6 md:px-12 text-center">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="font-mono-label text-xs uppercase text-violet-600 dark:text-cyan-300 mb-3"
+        >
+          06 / Contact
+        </motion.p>
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl font-bold mb-12"
+          className="font-display text-3xl md:text-4xl font-bold mb-12"
         >
-          Get In{" "}
-          <span className="text-indigo-600 dark:text-purple-400">Touch</span>
+          Get In <span className="gradient-text">Touch</span>
         </motion.h2>
 
         <div className="grid md:grid-cols-2 gap-12">
@@ -92,18 +104,38 @@ const Contact = () => {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col justify-center items-center md:items-start gap-5"
+            className="flex flex-col justify-center items-center md:items-start gap-6"
           >
             <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed text-center md:text-left">
               Have a project idea, collaboration, or just want to say hi? Drop a
-              message — I’d love to connect.
+              message — I'd love to connect.
             </p>
 
-            <div className="flex gap-6 text-2xl mt-4">
+            <div className="flex flex-col gap-3 w-full">
+              {contactDetails.map((c) => (
+                <div
+                  key={c.label}
+                  className="flex items-center gap-3 text-gray-700 dark:text-gray-300"
+                >
+                  <span className="text-violet-500 dark:text-cyan-300">{c.icon}</span>
+                  {c.href ? (
+                    <a href={c.href} className="hover:text-violet-600 dark:hover:text-cyan-300 transition">
+                      {c.label}
+                    </a>
+                  ) : (
+                    <span>{c.label}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-6 text-2xl mt-2">
               <a
                 href="mailto:nihaldas8888@gmail.com"
-                className="text-gray-700 hover:text-indigo-500 dark:text-gray-300 dark:hover:text-purple-400 transition"
+                className="text-gray-700 hover:text-violet-600 dark:text-gray-300 dark:hover:text-cyan-300 transition"
+                aria-label="Email"
               >
                 <FaEnvelope />
               </a>
@@ -111,7 +143,8 @@ const Contact = () => {
                 href="https://www.linkedin.com/in/nihal-py/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-700 hover:text-indigo-500 dark:text-gray-300 dark:hover:text-purple-400 transition"
+                className="text-gray-700 hover:text-violet-600 dark:text-gray-300 dark:hover:text-cyan-300 transition"
+                aria-label="LinkedIn"
               >
                 <FaLinkedin />
               </a>
@@ -119,7 +152,8 @@ const Contact = () => {
                 href="https://github.com/Nihal-das"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-700 hover:text-indigo-500 dark:text-gray-300 dark:hover:text-purple-400 transition"
+                className="text-gray-700 hover:text-violet-600 dark:text-gray-300 dark:hover:text-cyan-300 transition"
+                aria-label="GitHub"
               >
                 <FaGithub />
               </a>
@@ -132,8 +166,9 @@ const Contact = () => {
             onSubmit={handleSubmit}
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col gap-6 bg-white dark:bg-[#141C2F] p-8 rounded-2xl shadow-lg hover:shadow-xl transition"
+            className="flex flex-col gap-5 bg-white dark:bg-[#141C2F] p-8 rounded-2xl shadow-lg hover:shadow-xl transition"
           >
             <input
               type="text"
@@ -142,7 +177,7 @@ const Contact = () => {
               onChange={handleChange}
               placeholder="Your Name"
               required
-              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-[#0B1120] text-gray-900 dark:text-gray-100 border border-transparent focus:border-violet-400 dark:focus:border-cyan-400 outline-none transition"
             />
             <input
               type="email"
@@ -151,7 +186,7 @@ const Contact = () => {
               onChange={handleChange}
               placeholder="Your Email"
               required
-              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-[#0B1120] text-gray-900 dark:text-gray-100 border border-transparent focus:border-violet-400 dark:focus:border-cyan-400 outline-none transition"
             />
             <textarea
               name="message"
@@ -160,15 +195,17 @@ const Contact = () => {
               placeholder="Your Message"
               rows="5"
               required
-              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 resize-none"
+              className="w-full p-3 rounded-lg bg-gray-100 dark:bg-[#0B1120] text-gray-900 dark:text-gray-100 border border-transparent focus:border-violet-400 dark:focus:border-cyan-400 outline-none transition resize-none"
             ></textarea>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               type="submit"
-              className="px-6 py-3 bg-indigo-500 text-white rounded-full font-medium hover:bg-indigo-600 dark:bg-purple-500 dark:hover:bg-purple-600 transition"
+              className="px-6 py-3 rounded-full text-white font-medium bg-gradient-to-r from-[var(--color-violet)] to-[var(--color-cyan)] hover:shadow-lg hover:shadow-violet-500/30 transition-all"
             >
               Send Message
-            </button>
+            </motion.button>
           </motion.form>
         </div>
       </div>

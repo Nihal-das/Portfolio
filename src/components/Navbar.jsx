@@ -1,27 +1,39 @@
 import { useState, useEffect } from "react";
-import { FaBars, FaTimes, FaMoon, FaSun } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaBars, FaTimes, FaMoon, FaSun, FaFileDownload } from "react-icons/fa";
+
+const navItems = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
+  { label: "Education", href: "#education" },
+  { label: "Contact", href: "#contact" },
+];
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true); // Default dark mode ON
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Sync with system or saved preference
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+    if (savedTheme === "dark" || (!savedTheme && prefersDark) || !savedTheme) {
       document.documentElement.classList.add("dark");
       setIsDarkMode(true);
     } else {
       document.documentElement.classList.remove("dark");
       setIsDarkMode(false);
     }
+
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Smooth fade transition handler
   const enableTransition = () => {
     document.documentElement.classList.add("theme-transition");
     setTimeout(() => {
@@ -30,73 +42,112 @@ const Navbar = () => {
   };
 
   const toggleTheme = () => {
-    enableTransition(); // add fade effect
+    enableTransition();
     const newTheme = isDarkMode ? "light" : "dark";
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     localStorage.setItem("theme", newTheme);
     setIsDarkMode(!isDarkMode);
   };
 
-  const navItems = ["Home", "About", "Skills", "Projects", "Contact"];
-
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-[#0F172A]/80 dark:bg-white/10 backdrop-blur-md shadow-sm transition-colors duration-500">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-center relative items-center">
+    <motion.nav
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-white/80 dark:bg-[#060a14]/80 backdrop-blur-md shadow-md shadow-black/5"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <h1 className="absolute left-6 text-2xl font-bold tracking-wide text-purple-400 dark:text-indigo-600 cursor-pointer">
-          Nihal<span className="text-gray-900 dark:text-gray-200">.Das</span>
-        </h1>
+        <a
+          href="#home"
+          className="font-display text-xl font-bold tracking-tight text-gray-900 dark:text-white"
+        >
+          Nihal<span className="gradient-text">.dev</span>
+        </a>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-8 text-gray-800 dark:text-gray-200 font-medium">
+        <ul className="hidden md:flex gap-8 font-medium text-sm text-gray-700 dark:text-gray-300">
           {navItems.map((item) => (
-            <li key={item}>
+            <li key={item.label}>
               <a
-                href={`#${item.toLowerCase()}`}
-                className="relative group transition"
+                href={item.href}
+                className="relative group transition-colors hover:text-violet-600 dark:hover:text-cyan-300"
               >
-                {item}
-                <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-purple-400 dark:bg-indigo-600 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(139,92,246,0.8)] dark:shadow-[0_0_8px_rgba(79,70,229,0.8)]"></span>
+                {item.label}
+                <span className="absolute left-0 -bottom-1.5 w-0 h-0.5 bg-gradient-to-r from-[var(--color-violet)] to-[var(--color-cyan)] transition-all duration-300 group-hover:w-full" />
               </a>
             </li>
           ))}
         </ul>
 
-        {/* Theme Toggle Button */}
-        <button
-          hidden
-          onClick={toggleTheme}
-          className="absolute right-14 md:right-20 text-xl text-gray-200 dark:text-gray-800 hover:text-purple-400 dark:hover:text-indigo-600 transition-transform duration-300 hover:scale-110"
-          aria-label="Toggle Theme"
-        >
-          {isDarkMode ? <FaSun /> : <FaMoon />}
-        </button>
+        <div className="hidden md:flex items-center gap-4">
+          <a
+            href="/Nihal_PY_Resume.pdf"
+            download
+            className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-violet-500 hover:text-violet-600 dark:hover:border-cyan-300 dark:hover:text-cyan-300 transition"
+          >
+            <FaFileDownload /> Resume
+          </a>
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="text-lg text-gray-700 dark:text-gray-200 hover:text-violet-600 dark:hover:text-cyan-300 transition-transform hover:scale-110"
+          >
+            {isDarkMode ? <FaMoon /> : <FaSun />}
+          </button>
+        </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden absolute right-6 text-2xl text-gray-800 dark:text-gray-200"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <FaTimes /> : <FaBars />}
-        </button>
+        {/* Mobile buttons */}
+        <div className="md:hidden flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="text-lg text-gray-700 dark:text-gray-200"
+          >
+            {isDarkMode ? <FaMoon /> : <FaSun />}
+          </button>
+          <button
+            className="text-2xl text-gray-800 dark:text-gray-200"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden flex flex-col items-center bg-[#0F172A] dark:bg-white py-6 space-y-6 shadow-lg transition-all duration-300">
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          className="md:hidden flex flex-col items-center bg-white dark:bg-[#060a14] py-6 space-y-5 shadow-lg"
+        >
           {navItems.map((item) => (
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               onClick={() => setMenuOpen(false)}
-              className="text-gray-200 dark:text-gray-800 hover:text-purple-400 dark:hover:text-indigo-600 transition"
+              className="text-gray-700 dark:text-gray-200 hover:text-violet-600 dark:hover:text-cyan-300 transition"
             >
-              {item}
+              {item.label}
             </a>
           ))}
-        </div>
+          <a
+            href="/Nihal_PY_Resume.pdf"
+            download
+            className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700"
+          >
+            <FaFileDownload /> Resume
+          </a>
+        </motion.div>
       )}
-    </nav>
+    </motion.nav>
   );
 };
 
